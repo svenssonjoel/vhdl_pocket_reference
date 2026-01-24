@@ -1,0 +1,12 @@
+\usepackage{mdframed}
+
+% Redefine Shaded environment to add a frame
+\let\oldShaded\Shaded
+\let\endoldShaded\endShaded
+\renewenvironment{Shaded}{%
+  \begin{mdframed}[linewidth=0.5pt, innerleftmargin=5pt, innerrightmargin=5pt, innertopmargin=5pt, innerbottommargin=5pt]%
+  \begin{oldShaded}%
+}{%
+  \end{oldShaded}%
+  \end{mdframed}%
+}
