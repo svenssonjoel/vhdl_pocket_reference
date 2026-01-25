@@ -26,7 +26,7 @@ where the strong typing becomes apparent is in conditionals where:
 
 ```VHDL
 if a then
-   -- do something if a is true
+   -- Do something if a is true.
 end if;
 ```
 
@@ -37,7 +37,7 @@ VHDL is a language full of features for modeling and describing hardware.
 Some of its features correspond directly to hardware concepts, while others
 are purely software constructs useful for scripting complex hardware.
 An example is VHDL `for` loops, where the range of the for loop cannot
-depend on the value of signal. The for loop bounds must be entirely
+depend on the value of a signal. The for loop bounds must be entirely
 determined by values known at elaboration time (or hardware generation time).
 
 # Comments
@@ -46,9 +46,33 @@ In VHDL `--` starts a comment that extends to the end of the line.
 
 Example:
 ```VHDL
--- This line is a comment
+-- This line is a comment.
 a <= not b;
 ```
+
+# Whitespace
+
+Whitespace is used as a separator between syntactical tokens in
+VHDL code. As a separator between two tokens, any whitespace will do.
+For example:
+
+```
+a <= b;
+-- is the same thing as
+a
+<=
+b
+;
+```
+
+In this pocket reference we sometimes use newline as a token
+separator where you normally would use a space in order to fit
+the code on these tiny pages.
+
+Whitespace matters in string and bitvector literals though.
+Of course "Hello world" is not the same thing as "Helloworld".
+If "101 10" is used as a `std_logic_vector` literal it will cause
+an error, but if it is used as a string it will be fine.
 
 # Case sensitivity
 
@@ -58,16 +82,34 @@ The following signal declarations will cause an error:
 ```VHDL
 architecture RTL of my_entity is
     signal A : std_logic;
-    -- causes an already declared error
+    -- Causes an already declared error.
     signal a : std_logic;
 begin
 
 end RTL;
 ```
 
-It is perfectly ok to refer to the same entity using
-any capitalization of the entity name. For example the following
-is ok from a VHDL syntax perspective:
+Redeclaration with different case across port and local
+signal is also an error:
+
+```VHDL
+entity my_entity is
+   port (A : in std_logic);
+end my_entity;
+
+architecture RTL of my_entity is
+   -- Causes an already declared error
+   -- because it is declared in port.
+   signal a : std_logic;
+begin
+
+end RTL;
+```
+
+
+It is perfectly OK to refer to the same entity using
+any capitalization of the entity name. For example, the following
+is not disallowed by VHDL's syntax rules:
 
 ```VHDL
 entity an_entity is
@@ -81,22 +123,6 @@ end RTL;
 
 Consistency and following the pattern used by fellow
 HDL engineers is strongly suggested.
-
-Redeclaration with different case across port and local
-signal is also an error:
-
-```VHDL
-entity my_entity is
-   port (A : in std_logic);
-end my_entity;
-
-architecture RTL of my_entity is
-   -- causes an already declared error
-   signal a : std_logic;
-begin
-
-end RTL;
-```
 
 # Types
 
@@ -114,16 +140,47 @@ end RTL;
 type state is (IDLE, STATE_A, STATE_B);
 ```
 
+# Converting between types
 
 # Signals, Variables and constants
 
 # Operators
 
-# Entity and Component
+# Entity
 
-# Architectures
+The entity keyword is used to define the interface
+of a component. Consider a two-input one-output mux:
 
-# Processes
+```VHDL
+entity mux is
+   port (a : in std_logic;
+         b : in std_logic;
+         s : in std_logic;
+         y : out std_logic
+         );
+end mux;
+```
+
+Entities may also include generic parameters; see [Generics and Generate](#generics-and-generate).
+
+```VHDL
+entity gmux is
+    generic (WIDTH : integer := 8                                                    
+             );
+    port (a : in std_logic_vector
+                   (WIDTH-1 downto 0);
+          b : in std_logic_vector
+                   (WIDTH-1 downto 0);
+          s : in std_logic;
+          y : out std_logic_vector
+                   (WIDTH-1 downto 0)
+          );
+end gmux;
+```
+
+# Architecture
+
+# Process
 
 # Conditionals
 
