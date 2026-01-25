@@ -31,11 +31,11 @@ all: $(OUTPUT)
 $(OUTPUT): $(SRC)
 	pandoc $(PANDOC_OPTS) -o $@ $<
 
-# A4 with 4 pocket pages per side (2x2 grid)
+# A4 with 4 pocket pages per side, imposed for cut-stack duplex printing
 a4: $(OUTPUT_A4)
 
-$(OUTPUT_A4): $(OUTPUT)
-	pdfjam --nup 2x2 --paper a4paper --outfile $@ $<
+$(OUTPUT_A4): $(OUTPUT) impose.sh
+	./impose.sh $< $@
 
 clean:
 	rm -f $(OUTPUT) $(OUTPUT_A4)
