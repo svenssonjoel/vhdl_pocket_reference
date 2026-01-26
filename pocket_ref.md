@@ -126,15 +126,57 @@ HDL engineers is strongly suggested.
 
 # Types
 
-## bit
+## Built in
 
-## std_logic
+The following built in types are always present. No library import is needed.
 
-## std_logic_vector
+  - boolean - TRUE, FALSE
+  - bit - '0', '1'
+  - integer - typically 32-bit signed
+  - natural - integer >= 0 (subtype)
+  - positive - integer > 0 (subtype)
+  - time - for simulation (1 ns, 10 ps, etc.)
 
-## Declaring types
+The following types come from the `ieee.std_logic_1164` package and
+are ubiquitous in designs:
 
-### Enumeration types
+  - std_logic -  'U', 'X', '0', '1', 'Z', 'W', 'L', 'H', '-'
+  - std_logic_vector - array of std_logic
+
+## Subtypes
+
+A subtype is compatible with its parent type in assignments.
+Note that these assignments are allowed in both directions, from
+subtype to basetype and from basetype to subtype. In simulation
+range checks may find and point out places where an assignment
+would be incompatible.
+
+```vhdl
+subtype my_i is integer range -128 to 127;
+
+subtype logic is std_logic range 'X' to 'Z';
+```
+
+Given the signals:
+```vhdl
+signal i1 : my_i;
+signal i2 : integer;
+```
+
+both of the following assignmnents are OK.
+
+```vhdl
+i1 <= i2;
+i2 <= i1;
+```
+
+## Enumeration types
+
+Enumeration types can be used to give descriptive names
+to the states of a statemachine for example. The values
+of the enumaration type is automatically turned into
+bits using an encoding schema.
+
 
 ```VHDL
 type state is (IDLE, STATE_A, STATE_B);
