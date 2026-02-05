@@ -1,9 +1,10 @@
 ---
 title: VHDL Pocket Reference
-author: Bo Joel Svensson
 ---
 
 \newpage
+
+Authors: Bo Joel Svensson
 
 This work is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License** (CC BY-NC-SA 4.0).
 
@@ -124,6 +125,16 @@ end RTL;
 Consistency and following the pattern used by fellow
 HDL engineers is strongly suggested.
 
+# Object classes
+
+  In addition to type, each VHDL value belongs to an object class.
+
+  - signal - 
+  - variable - immediate assignment semantics.
+  - shared variable
+  - constant - immutable.
+  - file - special operations: `file_open`, `read`, `write`, `endfile`. See  [Text IO](#text-io).
+
 # Types
 
 ## Built in
@@ -237,4 +248,66 @@ end gmux;
 # State Machines
 
 # Testbenches
+
+## Text IO
+
+### reading data from a file
+
+Import libraries for reading file and for parsing data from strings.    
+```VHDL
+library IEEE;
+use IEEE.std_logic_textio.ALL;
+
+library STD;
+use STD.TEXTIO.ALL;
+```
+
+Files are declared using keyword `file`, the example below declares a
+text file. The type 'line' represents a line of text read from a file.
+
+```VHDL
+process
+   file my_file : text;
+   variable my_line : line;
+begin
+   file_open(my_file,
+             "path/to/file.txt",
+             READ_MODE);
+   
+```
+
+Now lines can be read form the file and data can be
+parsed from those lines.
+
+```VHDL
+  readline(my_file, my_line);
+```
+
+Now strings and values can be read from the line using `read` and
+`hread`. Both of these read a fixed number of bytes from the line
+and advances a read pointer for the next call to read.
+
+The size of a read is determined by the type of the variable you are
+reading into.
+
+```VHDL
+process
+   ...
+   text_1 : string (1 to 5);
+   val_1  : std_logic_vector( 7 downto 0);
+   ...
+begin
+   -- Read 5 characters into text_1.
+   read(my_line, text_1);
+   -- Read one character and interprete
+   -- it as an integer expressed in hex.
+   hread(my_line, val_1);
+   ...
+```
+
+
+
+
+   
+   
 
